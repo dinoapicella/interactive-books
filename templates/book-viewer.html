@@ -1,0 +1,29 @@
+<div class="book-container">
+  <div class="book-wrapper">
+    <div class="book-spine"></div>
+
+    <!-- Pagine BASE sotto (z:1) – vedono il contenuto dello spread corrente -->
+    <div class="book-page left"><div class="page-content"></div></div>
+    <div class="book-page right"><div class="page-content"></div></div>
+
+    <!--
+      PAGINA CHE GIRA DESTRA (avanti).
+      .page-card è il wrapper che ruota attorno al bordo sinistro.
+      dentro ha fronte (pagina corrente destra) e retro (prossima pagina sinistra).
+    -->
+    <div class="page-card card-right">
+      <div class="card-face face-front"><div class="page-content"></div></div>
+      <div class="card-face face-back"><div class="page-content"></div></div>
+    </div>
+
+    <!--
+      PAGINA CHE GIRA SINISTRA (indietro).
+      .page-card ruota attorno al bordo destro.
+      fronte = pagina corrente sinistra, retro = precedente pagina destra.
+    -->
+    <div class="page-card card-left">
+      <div class="card-face face-front"><div class="page-content"></div></div>
+      <div class="card-face face-back"><div class="page-content"></div></div>
+    </div>
+  </div>
+</div>

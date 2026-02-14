@@ -1,0 +1,15 @@
+{
+  "INTERACTIVE_BOOKS": {
+    "OpenAsBook": "Open as Interactive Book",
+    "SettingEnableSounds": "Enable Sounds",
+    "SettingEnableSoundsHint": "Play sounds when turning pages",
+    "SettingSoundVolume": "Sound Volume",
+    "SettingSoundVolumeHint": "Volume of page turning sounds (0.0 - 1.0)",
+    "SettingAnimationSpeed": "Animation Speed",
+    "SettingAnimationSpeedHint": "Controls the speed of page turning animations (0.3 = slow, 1.5 = fast)",
+    "SettingMedievalStyle": "Medieval Style",
+    "SettingMedievalStyleHint": "Enable medieval fonts and styling for page text",
+    "SettingDynamicPagination": "Dynamic Pagination",
+    "SettingDynamicPaginationHint": "Automatically split content into pages based on window height (removes scrollbars)"
+  }
+}

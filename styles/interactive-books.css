@@ -1,0 +1,347 @@
+/* ================================================
+   Interactive Books – Styles
+   ================================================ */
+
+/* Import Google Fonts per stile medievale */
+@import url('https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=MedievalSharp&family=Cinzel:wght@400;600;700&family=IM+Fell+English:ital@0;1&display=swap');
+
+.interactive-book {
+  background: linear-gradient(135deg, #2c2416 0%, #3d3227 100%);
+  border: none;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+.interactive-book .window-content {
+  background: transparent;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* ── Contenitore ── */
+.book-container {
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  perspective: 1200px; /* Ridotto per meno effetto 3D verticale */
+  padding: 40px 20px;
+  box-sizing: border-box;
+}
+.book-wrapper {
+  position: relative;
+  width: 100%; max-width: 800px; height: 100%;
+  display: flex;
+  box-shadow: 0 0 60px rgba(0,0,0,0.4);
+  transform-style: preserve-3d;
+  animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+  from { opacity:0; transform:scale(0.96); }
+  to   { opacity:1; transform:scale(1); }
+}
+
+/* ── Pagine base (sempre sotto, z:1) ── */
+.book-page {
+  flex: 1;
+  position: relative;
+  /* Sfondo pergamena SOLIDO */
+  background: #f4ead5;
+  background-image: 
+    linear-gradient(to bottom, 
+      #f9f2e3 0%, 
+      #f4ead5 50%,
+      #f0e4c8 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 115, 85, 0.04) 2px, rgba(139, 115, 85, 0.04) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(139, 115, 85, 0.04) 2px, rgba(139, 115, 85, 0.04) 4px);
+  padding: 50px 40px;
+  overflow-y: auto; /* Default: con scrollbar se necessario */
+  border: 1px solid #8b7355;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+/* Con paginazione dinamica: NO scrollbar */
+.interactive-book[data-dynamic-pagination="true"] .book-page,
+.interactive-book[data-dynamic-pagination="true"] .card-face {
+  overflow-y: hidden !important;
+}
+
+.book-page.left  { 
+  border-right: 3px solid #6d5d4b; 
+  box-shadow: inset -15px 0 30px -15px rgba(0,0,0,0.2);
+}
+.book-page.right { 
+  border-left:  3px solid #6d5d4b; 
+  box-shadow: inset  15px 0 30px -15px rgba(0,0,0,0.2);
+}
+
+/* ─────────────────────────────────────────────────────
+   PAGE-CARD – il wrapper che ruota. preserve-3d, NO skew sul wrapper.
+   ───────────────────────────────────────────────────── */
+.page-card {
+  position: absolute;
+  top: 0; bottom: 0;
+  width: 50%;
+  z-index: 3;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg);
+  cursor: grab;
+}
+
+.page-card.card-right {
+  right: 0;
+  transform-origin: left center;
+}
+.page-card.card-left {
+  left: 0;
+  transform-origin: right center;
+}
+.page-card.dragging { cursor: grabbing; }
+
+/* ─────────────────────────────────────────────────────
+   CARD-FACE – le due facce. backface-visibility:hidden.
+   face-back ha rotateY(180deg) così appare correttamente.
+   ───────────────────────────────────────────────────── */
+.card-face {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  /* Sfondo pergamena SOLIDO */
+  background: #f4ead5;
+  background-image: 
+    linear-gradient(to bottom, 
+      #f9f2e3 0%, 
+      #f4ead5 50%,
+      #f0e4c8 100%),
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(139, 115, 85, 0.04) 2px, rgba(139, 115, 85, 0.04) 4px),
+    repeating-linear-gradient(90deg, transparent, transparent 2px, rgba(139, 115, 85, 0.04) 2px, rgba(139, 115, 85, 0.04) 4px);
+  padding: 50px 40px;
+  overflow-y: auto;
+  border: 1px solid #8b7355;
+  box-sizing: border-box;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+.card-face.face-front {
+  /* Nessuna rotazione aggiuntiva */
+}
+
+/* face-back: ruotata di 180° per essere vista correttamente quando il card ruota.
+   Il contenuto appare dritto, non specchiato. */
+.card-face.face-back {
+  transform: rotateY(180deg);
+}
+
+/* ── Border e ombre specifiche per lato ── */
+.card-right .face-front {
+  border-left: 3px solid #6d5d4b;
+  box-shadow: inset 15px 0 30px -15px rgba(0,0,0,0.2);
+}
+.card-right .face-back {
+  border-right: 3px solid #6d5d4b;
+  box-shadow: inset -15px 0 30px -15px rgba(0,0,0,0.2);
+}
+
+.card-left .face-front {
+  border-right: 3px solid #6d5d4b;
+  box-shadow: inset -15px 0 30px -15px rgba(0,0,0,0.2);
+}
+.card-left .face-back {
+  border-left: 3px solid #6d5d4b;
+  box-shadow: inset 15px 0 30px -15px rgba(0,0,0,0.2);
+}
+
+/* ── Ombra dinamica durante il drag ── */
+.page-card.dragging {
+  filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+}
+
+/* ── Dorso (spine) ── */
+.book-spine {
+  position: absolute;
+  top: 0; left: 50%;
+  width: 4px; height: 100%;
+  background: linear-gradient(to bottom, #5c4a3a, #3d3227 50%, #5c4a3a);
+  transform: translateX(-50%);
+  box-shadow: 0 0 10px rgba(0,0,0,0.5), inset 0 0 5px rgba(0,0,0,0.5);
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* ══════════════════════════════════════════════════════
+   CONTENUTO TESTUALE - Stile Base (Default)
+   ══════════════════════════════════════════════════════ */
+.page-content {
+  font-family: 'Palatino Linotype', 'Book Antiqua', Palatino, serif;
+  font-size: 14px;
+  line-height: 1.8;
+  color: #2c2416;
+  text-align: justify;
+  padding-bottom: 40px;
+  user-select: none;
+}
+
+.page-content h1, .page-content h2, .page-content h3 {
+  font-family: 'Palatino Linotype', 'Book Antiqua', serif;
+  color: #5c4a3a;
+  margin-top: 20px; margin-bottom: 15px;
+  text-align: center;
+}
+
+.page-content h1 { font-size: 28px; border-bottom: 2px solid #8b7355; padding-bottom: 10px; }
+.page-content h2 { font-size: 22px; }
+.page-content h3 { font-size: 18px; }
+.page-content p  { margin-bottom: 12px; text-indent: 20px; }
+
+.page-content img {
+  max-width: 100%; height: auto; display: block;
+  margin: 20px auto;
+  border: 2px solid #8b7355;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+/* ══════════════════════════════════════════════════════
+   CONTENUTO TESTUALE - Stile Medievale (Opzionale)
+   ══════════════════════════════════════════════════════ */
+.medieval-style .page-content {
+  font-family: 'IM Fell English', 'Palatino Linotype', 'Book Antiqua', serif;
+  font-size: 15px;
+  line-height: 1.9;
+  color: #2a1f15;
+  text-shadow: 0.5px 0.5px 1px rgba(42, 31, 21, 0.15);
+}
+
+/* ── Capolettera decorata (prima lettera del primo paragrafo) ── */
+.medieval-style .page-content > p:first-of-type::first-letter {
+  font-family: 'UnifrakturMaguntia', 'Cinzel', serif;
+  font-size: 3.5em;
+  line-height: 0.85;
+  float: left;
+  margin: 5px 8px 0 0;
+  color: #8b0000;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+}
+
+/* ── Titoli in stile gotico/medievale ── */
+.medieval-style .page-content h1, 
+.medieval-style .page-content h2, 
+.medieval-style .page-content h3 {
+  font-family: 'Cinzel', 'MedievalSharp', serif;
+  color: #5c3a1f;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 2px rgba(92, 58, 31, 0.2);
+}
+
+.medieval-style .page-content h1 { 
+  font-size: 32px; 
+  border-bottom: 3px double #8b7355; 
+  padding-bottom: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+}
+
+.medieval-style .page-content h2 { 
+  font-size: 24px;
+  font-weight: 600;
+  border-bottom: 1px solid #8b7355;
+  padding-bottom: 8px;
+}
+
+.medieval-style .page-content h3 { 
+  font-size: 19px;
+  font-weight: 600;
+  font-style: italic;
+}
+
+/* ── Paragrafi ── */
+.medieval-style .page-content p  { 
+  margin-bottom: 14px; 
+  text-indent: 25px;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+
+/* ── Citazioni / blockquote ── */
+.medieval-style .page-content blockquote {
+  margin: 20px 30px;
+  padding: 15px 20px;
+  border-left: 4px solid #8b7355;
+  background: rgba(139, 115, 85, 0.08);
+  font-style: italic;
+  color: #3d2f1f;
+}
+
+/* ── Liste ── */
+.medieval-style .page-content ul, 
+.medieval-style .page-content ol {
+  margin: 15px 0 15px 35px;
+  padding: 0;
+}
+
+.medieval-style .page-content li {
+  margin-bottom: 8px;
+  line-height: 1.8;
+}
+
+/* ── Immagini / Illustrazioni ── */
+.medieval-style .page-content img {
+  max-width: 100%; 
+  height: auto; 
+  display: block;
+  margin: 25px auto;
+  border: 3px solid #8b7355;
+  box-shadow: 0 3px 10px rgba(0,0,0,0.3), inset 0 0 15px rgba(139, 115, 85, 0.1);
+  padding: 8px;
+  background: linear-gradient(to bottom, #f9f2e3, #f4ead5);
+}
+
+/* ── Enfasi e grassetto ── */
+.medieval-style .page-content strong, 
+.medieval-style .page-content b {
+  font-weight: 600;
+  color: #2a1f15;
+}
+
+.medieval-style .page-content em, 
+.medieval-style .page-content i {
+  font-style: italic;
+  color: #3d2f1f;
+}
+
+/* ── Link ── */
+.medieval-style .page-content a {
+  color: #8b0000;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+}
+
+.medieval-style .page-content a:hover {
+  color: #a52a2a;
+  text-decoration-style: solid;
+}
+
+/* ── Scrollbar ── */
+.book-page::-webkit-scrollbar,
+.card-face::-webkit-scrollbar { 
+  width: 10px; 
+}
+
+.book-page::-webkit-scrollbar-track,
+.card-face::-webkit-scrollbar-track { 
+  background: #e8dfc8; 
+  border-radius: 5px;
+  border: 1px solid #8b7355;
+}
+
+.book-page::-webkit-scrollbar-thumb,
+.card-face::-webkit-scrollbar-thumb { 
+  background: linear-gradient(to bottom, #8b7355, #6d5d4b);
+  border-radius: 5px; 
+  border: 1px solid #5c4a3a;
+}
+
+.book-page::-webkit-scrollbar-thumb:hover,
+.card-face::-webkit-scrollbar-thumb:hover { 
+  background: linear-gradient(to bottom, #6d5d4b, #5c4a3a);
+}

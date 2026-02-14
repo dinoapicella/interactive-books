@@ -1,0 +1,15 @@
+{
+  "INTERACTIVE_BOOKS": {
+    "OpenAsBook": "Apri come Libro Interattivo",
+    "SettingEnableSounds": "Abilita Suoni",
+    "SettingEnableSoundsHint": "Riproduce suoni quando si sfogliano le pagine del libro",
+    "SettingSoundVolume": "Volume Suoni",
+    "SettingSoundVolumeHint": "Volume dei suoni di sfoglio (0.0 - 1.0)",
+    "SettingAnimationSpeed": "Velocità Animazioni",
+    "SettingAnimationSpeedHint": "Controlla la velocità delle animazioni di sfogliamento (0.3 = lento, 1.5 = veloce)",
+    "SettingMedievalStyle": "Stile Medievale",
+    "SettingMedievalStyleHint": "Abilita font e stile medievale per il testo delle pagine",
+    "SettingDynamicPagination": "Paginazione Dinamica",
+    "SettingDynamicPaginationHint": "Divide automaticamente il contenuto in pagine in base all'altezza della finestra (elimina scrollbar)"
+  }
+}
